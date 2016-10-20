@@ -9,7 +9,18 @@ require_once 'proratemembership.civix.php';
  */
 function proratemembership_civicrm_buildAmount($pageType, &$form, &$amount) {
   if ($pageType == 'membership') {
-    $proratedAmount = new CRM_Proratemembership_Prorate($memtype);
+    //TODO make setting that sets priceFields array and then do an api call to get said price fields array
+    $priceFields = array(455);
+    foreach ($priceFields as $priceField) {
+      $prorates = array();
+      foreach ($amount[$priceField]['options'] as $option => $optionValues) {
+        if (empty($prorates[$optionValues['membership_type_id']])) {
+          $prorates[$optionValues['membership_type_id']] = new CRM_Proratemembership_Prorate($memType);
+        }
+        //TODO set calc variables a different way.
+        $amount[$priceField]['options'][$option]['amount'] = $prorates[$optionValues['membership_type_id']]->calcprice($optionValues['amount'], $optionValues['membership_num_terms']);
+      }
+    }
   }
 }
 
