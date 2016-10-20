@@ -29,15 +29,15 @@ class CRM_Proratemembership_Prorate {
       $rolloverDateFormatted = date('Y', $today) . "-" . $rolloverDate[0] . "-" . $rolloverDate[1];
       $rolloverDate = date_create_from_format('Y-m-d', "$rolloverDateFormatted");
       $rolloverDate = date_timestamp_get($rolloverDate);
-      $fraction = ($rolloverDate - $today) / 31622399;
+      $this->fraction = ($rolloverDate - $today) / 31622399;
     }
   }
   public function calcprice($stickerPrice, $terms = 1) {
     if ($terms == 1) {
-      $factor = $fraction;
+      $factor = $this->fraction;
     }
     if ($terms > 1) {
-      $factor = $fraction + ($terms - 1);
+      $factor = $this->fraction + ($terms - 1);
     }
     $proratedPrice = $stickerPrice * $factor;
     return $proratedPrice;

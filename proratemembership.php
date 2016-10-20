@@ -15,7 +15,7 @@ function proratemembership_civicrm_buildAmount($pageType, &$form, &$amount) {
       $prorates = array();
       foreach ($amount[$priceField]['options'] as $option => $optionValues) {
         if (empty($prorates[$optionValues['membership_type_id']])) {
-          $prorates[$optionValues['membership_type_id']] = new CRM_Proratemembership_Prorate($memType);
+          $prorates[$optionValues['membership_type_id']] = new CRM_Proratemembership_Prorate($optionValues['membership_type_id']);
         }
         //TODO set calc variables a different way.
         $amount[$priceField]['options'][$option]['amount'] = $prorates[$optionValues['membership_type_id']]->calcprice($optionValues['amount'], $optionValues['membership_num_terms']);
