@@ -3,6 +3,17 @@
 require_once 'proratemembership.civix.php';
 
 /**
+ *  Implements hook_civicrm_buildAmount().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildAmount
+ */
+function proratemembership_civicrm_buildAmount($pageType, &$form, &$amount) {
+  if ($pageType == 'membership') {
+    $proratedAmount = new CRM_Proratemembership_Prorate($memtype);
+  }
+}
+
+/**
  * Implements hook_civicrm_config().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
