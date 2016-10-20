@@ -20,16 +20,26 @@ class CRM_Proratemembership_Prorate {
         1 => $error,
       )));
     }
-    if ($membershipType['period_type'] == 'fixed') {
+    if ($membershipType['period_type'] == 'fixed' && $membershipType['duration_unit'] == 'year' &&  $membershipType['duration_interval'] == 1) {
       // Date of membership signup
       $today = time();
-  
+
       //roll over date
       $rolloverDate = str_split($membershipType['fixed_period_rollover_day'], 2);
-      $rolloverDate = date_create_from_format('Y-m-d', "Y-$rolloverDate[0]-$rolloverDate[1]");
+      $rolloverDateFormatted = date('Y', $today) . "-" . $rolloverDate[0] . "-" . $rolloverDate[1];
+      $rolloverDate = date_create_from_format('Y-m-d', "$rolloverDateFormatted");
+      $rolloverDate = date_timestamp_get($rolloverDate);
+      $fraction = ($rolloverDate - $today) / 31622399;
     }
   }
   public function calcprice($stickerPrice, $terms = 1) {
+    if ($terms == 1) {
+      $factor = $fraction;
+    }
+    if ($terms > 1) {
+      $factor = $fraction + ($terms - 1);
+    }
+    $proratedPrice = $stickerPrice * $factor;
     return $proratedPrice;
   }
 
