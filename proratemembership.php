@@ -26,8 +26,6 @@ function proratemembership_civicrm_buildAmount($pageType, &$form, &$amount) {
 
 /**
  * Implements hook_civicrm_buildform().
- * @param  string $formName  Name of form
- * @param  object $form     form object
  */
 function proratemembership_civicrm_buildform($formName, &$form) {
   if ($formName == 'CRM_Price_Form_Field') {
@@ -37,6 +35,16 @@ function proratemembership_civicrm_buildform($formName, &$form) {
     CRM_Core_Region::instance('page-body')->add(array(
       'template' => "{$templatePath}/pricefieldprorate.tpl",
     ));
+  }
+}
+
+/**
+ * Implements hook_civicrm_postProcess().
+ */
+function proratemembership_civicrm_postProcess($formName, &$form) {
+  if ($formName == 'CRM_Price_Form_Field') {
+    print_r($form);
+    die();
   }
 }
 
