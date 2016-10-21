@@ -25,9 +25,19 @@ class CRM_Proratemembership_Prorate {
       $today = time();
 
       //roll over and start dates
-      $rolloverDate = str_split($membershipType['fixed_period_rollover_day'], 2);
-      $fixedStartMonthDay = str_split($membershipType['fixed_period_start_day'], 2);
-
+      $rolloverDayString = $membershipType['fixed_period_rollover_day'];
+      if (strlen($rolloverDayString) == 3) {
+        $rolloverDayString = '0' . $rolloverDayString;
+      }
+      $startDayString = $membershipType['fixed_period_start_day'];
+      if (strlen($startDayString) == 3) {
+        $startDayString = '0' . $startDayString;
+      }
+      $rolloverDate = str_split($rolloverDayString, 2);
+      $fixedStartMonthDay = str_split($startDayString, 2);
+      if (strlen($rolloverDate) == 3) {
+        $rolloverDate = '0' . $rolloverDate;
+      }
       $endYear = $startYear = date('Y', $today);
       if ($fixedStartMonthDay[0] != '01') {
         $endYear = $endYear + $membershipType['duration_interval'];
