@@ -29,9 +29,9 @@ function proratemembership_civicrm_buildAmount($pageType, &$form, &$amount) {
  */
 function proratemembership_civicrm_buildform($formName, &$form) {
   if ($formName == 'CRM_Price_Form_Field') {
-    $form->add('checkbox', 'proratemembership_pricefieldstoprorate', ts('Prorate this price field?'));
-    $defaults['proratemembership_pricefieldstoprorate'] = 0;
-    $form->setDefaults($defaults);
+    $form->add('checkbox', 'isprorate', ts('Prorate this price field?'));
+    // $defaults['proratemembership_pricefieldstoprorate'] = 0;
+    // $form->setDefaults($defaults);
     // Assumes templates are in a templates folder relative to this file.
     $templatePath = realpath(dirname(__FILE__) . "/templates");
     CRM_Core_Region::instance('page-body')->add(array(
@@ -47,6 +47,20 @@ function proratemembership_civicrm_postProcess($formName, &$form) {
   if ($formName == 'CRM_Price_Form_Field') {
     print_r($form);
     die();
+    if ($form['proratemembership_pricefieldstoprorate']['checked'] == 'checked') {
+      try {
+        $prorate = civicrm_api3('Setting', 'get', array(
+          'id' => $memtype,
+        ));
+      }
+      catch (CiviCRM_API3_Exception $e) {
+        $error = $e->getMessage();
+        CRM_Core_Error::debug_log_message(ts('API Error %1', array(
+          'domain' => 'com.aghstrategies.proratemembership',
+          1 => $error,
+        )));
+      }
+    }
   }
 }
 
