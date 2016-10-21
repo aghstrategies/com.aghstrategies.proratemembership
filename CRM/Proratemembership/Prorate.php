@@ -20,16 +20,23 @@ class CRM_Proratemembership_Prorate {
         1 => $error,
       )));
     }
-    if ($membershipType['period_type'] == 'fixed' && $membershipType['duration_unit'] == 'year' &&  $membershipType['duration_interval'] == 1) {
+    if ($membershipType['period_type'] == 'fixed' && $membershipType['duration_unit'] == 'year' && !empty($membershipType['duration_interval'])) {
       // Date of membership signup
       $today = time();
 
-      //roll over date
+      //roll over and start dates
       $rolloverDate = str_split($membershipType['fixed_period_rollover_day'], 2);
-      $rolloverDateFormatted = date('Y', $today) . "-" . $rolloverDate[0] . "-" . $rolloverDate[1];
+      $endYear = $startYear = date('Y', $today);
+      if ($rolloverDate[0] != '01') {
+        $endYear = $endYear + $membershipType['duration_interval'];
+      }
+      $rolloverDateFormatted = $endYear . "-" . $rolloverDate[0] . "-" . $rolloverDate[1];
       $rolloverDate = date_create_from_format('Y-m-d', "$rolloverDateFormatted");
       $rolloverDate = date_timestamp_get($rolloverDate);
-      $this->fraction = ($rolloverDate - $today) / 31622399;
+      $fixedStartMonthDay = str_split($membershipType['fixed_period_start_day'], 2);
+      $fixedStartDate = $startYear . '-' . $fixedStartMonthDay[0] . '-' . $fixedStartMonthDay[1];
+      $fixedStartDate = date_timestamp_get(date_create_from_format('Y-m-d', "$fixedStartDate"));
+      $this->fraction = ($rolloverDate - $today) / ($rolloverDate - $fixedStartDate);
     }
   }
   public function calcprice($stickerPrice, $terms = 1) {
