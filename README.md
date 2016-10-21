@@ -14,6 +14,5 @@ TODO:
 
 Add a setting to set which membership types get prorated
 
-+ Make a setting for proratefixedmembership that is a checkbox
-+ using the buildform hook add the checkbox to the edit price field (in this example for 455)
-+ using the postprocess hook when the edit price field form is submitted save the setting to the database
++ use js to move td to approproate place
++ use the postprocess hook to update settings

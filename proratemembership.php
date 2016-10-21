@@ -34,8 +34,9 @@ function proratemembership_civicrm_buildform($formName, &$form) {
     // $form->setDefaults($defaults);
     // Assumes templates are in a templates folder relative to this file.
     $templatePath = realpath(dirname(__FILE__) . "/templates");
-    CRM_Core_Region::instance('page-body')->add(array(
+    CRM_Core_Region::instance('form-body')->add(array(
       'template' => "{$templatePath}/pricefieldprorate.tpl",
+      'weight' => -5,
     ));
   }
 }
@@ -47,10 +48,14 @@ function proratemembership_civicrm_postProcess($formName, &$form) {
   if ($formName == 'CRM_Price_Form_Field') {
     print_r($form);
     die();
-    if ($form['proratemembership_pricefieldstoprorate']['checked'] == 'checked') {
+    if ($form->_submitValues['isprorate'] == 1) {
+      // TODO get array of settings
+      // Check if it is already in there
+      // If so do nothing
+      // IF not arleadt in array add it to the array
       try {
         $prorate = civicrm_api3('Setting', 'get', array(
-          'id' => $memtype,
+          // 'id' => $memtype,
         ));
       }
       catch (CiviCRM_API3_Exception $e) {
