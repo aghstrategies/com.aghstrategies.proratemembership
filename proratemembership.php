@@ -24,6 +24,8 @@ function proratemembership_civicrm_buildAmount($pageType, &$form, &$amount) {
   }
 }
 
+
+
 /**
  * Implements hook_civicrm_config().
  *
