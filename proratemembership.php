@@ -30,13 +30,13 @@ function proratemembership_civicrm_buildAmount($pageType, &$form, &$amount) {
 function proratemembership_civicrm_buildform($formName, &$form) {
   if ($formName == 'CRM_Price_Form_Field') {
     $form->add('checkbox', 'isprorate', ts('Prorate this price field?'));
+    CRM_Core_Resources::singleton()->addScriptFile('com.aghstrategies.proratemembership', 'js/proratemembership.js');
     // $defaults['proratemembership_pricefieldstoprorate'] = 0;
     // $form->setDefaults($defaults);
     // Assumes templates are in a templates folder relative to this file.
     $templatePath = realpath(dirname(__FILE__) . "/templates");
     CRM_Core_Region::instance('form-body')->add(array(
       'template' => "{$templatePath}/pricefieldprorate.tpl",
-      'weight' => -5,
     ));
   }
 }
