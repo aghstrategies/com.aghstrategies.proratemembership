@@ -24,7 +24,21 @@ function proratemembership_civicrm_buildAmount($pageType, &$form, &$amount) {
   }
 }
 
-
+/**
+ * Implements hook_civicrm_buildform().
+ * @param  string $formName  Name of form
+ * @param  object $form     form object
+ */
+function proratemembership_civicrm_buildform($formName, &$form) {
+  if ($formName == 'CRM_Price_Form_Field') {
+    $form->addElement('checkbox', 'proratemembership_pricefieldstoprorate', ts('Prorate this price field?'));        
+    // Assumes templates are in a templates folder relative to this file.
+    // $templatePath = realpath(dirname(__FILE__) . "/templates");
+    // CRM_Core_Region::instance('page-body')->add(array(
+    //   'template' => "{$templatePath}/pricefieldOthersignup.tpl",
+    // ));
+  }
+}
 
 /**
  * Implements hook_civicrm_config().
