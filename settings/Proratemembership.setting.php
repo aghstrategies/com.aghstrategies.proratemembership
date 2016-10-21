@@ -5,11 +5,12 @@
  * Copyright (C) 2016, AGH Strategies, LLC <info@aghstrategies.com>
  * Licensed under the GNU Affero Public License 3.0 (see LICENSE.txt)
  */
+
 return array(
-  'proratemembership_pricefieldstoprorate' => array(
-    'group_name' => 'Price Fields to be prorated',
+  'proratemembership_pricefields' => array(
+    'group_name' => 'Prorate Preferences',
     'group' => 'proratemembership',
-    'name' => 'proratemembership_pricefieldstoprorate',
+    'name' => 'proratemembership_pricefields',
     'type' => 'Array',
     'default' => NULL,
     'add' => '4.6',
