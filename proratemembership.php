@@ -41,8 +41,24 @@ function proratemembership_civicrm_buildform($formName, &$form) {
   if ($formName == 'CRM_Price_Form_Field') {
     $form->add('checkbox', 'isprorate', ts('Prorate this price field?'));
     CRM_Core_Resources::singleton()->addScriptFile('com.aghstrategies.proratemembership', 'js/proratemembership.js');
-    // $defaults['proratemembership_pricefieldstoprorate'] = 0;
-    // $form->setDefaults($defaults);
+    //set default value
+    $defaults = array('isprorate' => 0);
+    try {
+      $prorateFields = civicrm_api3('Setting', 'get', array(
+        'return' => "proratemembership_pricefields",
+      ));
+    }
+    catch (CiviCRM_API3_Exception $e) {
+      $error = $e->getMessage();
+      CRM_Core_Error::debug_log_message(ts('API Error %1', array(
+        'domain' => 'com.aghstrategies.proratemembership',
+        1 => $error,
+      )));
+    }
+    if (in_array($form->getVar('_fid'), $prorateFields['values'][1]['proratemembership_pricefields'])) {
+      $defaults['isprorate'] = 1;
+    }
+    $form->setDefaults($defaults);
     // Assumes templates are in a templates folder relative to this file.
     $templatePath = realpath(dirname(__FILE__) . "/templates");
     CRM_Core_Region::instance('form-body')->add(array(
