@@ -71,7 +71,7 @@ function proratemembership_civicrm_postProcess($formName, &$form) {
     $fieldsToBeProrated = $prorateFields['values'][1]['proratemembership_pricefields'];
     $fid = $form->getVar('_fid');
     if ($form->_submitValues['isprorate'] == 1) {
-      if (CRM_Utils_Array::value($ffid, $fieldsToBeProrated)) {
+      if (CRM_Utils_Array::value($fid, $fieldsToBeProrated)) {
         return;
       }
       else {
@@ -80,7 +80,8 @@ function proratemembership_civicrm_postProcess($formName, &$form) {
     }
     else {
       if (CRM_Utils_Array::value($fid, $fieldsToBeProrated)) {
-        unset($fieldsToBeProrated[$fid]);
+        $key = array_search($fid, $fieldsToBeProrated);
+        unset($fieldsToBeProrated[$key]);
       }
     }
     try {
