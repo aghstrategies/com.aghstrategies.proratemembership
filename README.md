@@ -14,5 +14,5 @@ TODO:
 
 Add a setting to set which membership types get prorated
 
-+ use js to move td to approproate place
-+ use the postprocess hook to update settings
++ deal with default
++ test
