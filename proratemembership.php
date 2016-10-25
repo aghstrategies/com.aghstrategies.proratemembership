@@ -50,12 +50,13 @@ function proratemembership_civicrm_postProcess($formName, &$form) {
     die();
     if ($form->_submitValues['isprorate'] == 1) {
       // TODO get array of settings
+
       // Check if it is already in there
       // If so do nothing
       // IF not arleadt in array add it to the array
       try {
-        $prorate = civicrm_api3('Setting', 'get', array(
-          // 'id' => $memtype,
+        $prorateFields = civicrm_api3('Setting', 'get', array(
+          'return' => "proratemembership_pricefields",
         ));
       }
       catch (CiviCRM_API3_Exception $e) {
@@ -64,6 +65,26 @@ function proratemembership_civicrm_postProcess($formName, &$form) {
           'domain' => 'com.aghstrategies.proratemembership',
           1 => $error,
         )));
+      }
+      $prorateFields['values'] = $fieldsToBeProrated;
+      if (CRM_Utils_Array::value($form->_submitValues['fid'], $fieldsToBeProrated)) {
+        return;
+      }
+      else {
+        $fieldsToBeProrated[] = $form->_submitValues['fid'];
+        try {
+          $result = civicrm_api3('Setting', 'create', array(
+            'sequential' => 1,
+            'proratemembership_pricefields' => $fieldsToBeProrated,
+          ));
+        }
+        catch (CiviCRM_API3_Exception $e) {
+          $error = $e->getMessage();
+          CRM_Core_Error::debug_log_message(ts('API Error %1', array(
+            'domain' => 'com.aghstrategies.proratemembership',
+            1 => $error,
+          )));
+        }
       }
     }
   }
