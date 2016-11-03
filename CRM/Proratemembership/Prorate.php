@@ -59,7 +59,7 @@ class CRM_Proratemembership_Prorate {
       $factor = $this->fraction + ($terms - 1);
     }
     $proratedPrice = $stickerPrice * $factor;
-    return $proratedPrice;
+    return number_format((float) $proratedPrice, 2, '.', '');
   }
 
 }
