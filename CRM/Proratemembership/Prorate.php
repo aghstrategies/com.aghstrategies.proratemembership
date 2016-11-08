@@ -4,7 +4,7 @@ class CRM_Proratemembership_Prorate {
 
   public $fraction = 1;
 
-  public $rollOver = FALSE;
+  public $rollOver = 0;
 
   public function __construct($memtype) {
 
@@ -38,29 +38,26 @@ class CRM_Proratemembership_Prorate {
       if (strlen($rolloverDate) == 3) {
         $rolloverDate = '0' . $rolloverDate;
       }
-      $endYear = $startYear = date('Y', $today);
-      if ($fixedStartMonthDay[0] != '01') {
-        $endYear = $endYear + $membershipType['duration_interval'];
-      }
+      $startYear = date('Y', $today);
+      $endYear = $startYear + $membershipType['duration_interval'];
       $rolloverDateFormatted = $endYear . "-" . $rolloverDate[0] . "-" . $rolloverDate[1];
       $rolloverDate = date_create_from_format('Y-m-d', "$rolloverDateFormatted");
       $rolloverDate = date_timestamp_get($rolloverDate);
-      $this->rollOver = $rolloverDate;
       $fixedStartDate = $startYear . '-' . $fixedStartMonthDay[0] . '-' . $fixedStartMonthDay[1];
       $fixedStartDate = date_timestamp_get(date_create_from_format('Y-m-d', "$fixedStartDate"));
       $fixedEndDate = $endYear . '-' . $fixedStartMonthDay[0] . '-' . $fixedStartMonthDay[1];
       $fixedEndDate = date_timestamp_get(date_create_from_format('Y-m-d', "$fixedEndDate"));
       $this->fraction = ($fixedEndDate - $today) / ($fixedEndDate - $fixedStartDate);
       if ($today > $rolloverDate) {
-        $this->rollOver = TRUE;
+        $this->rollOver = 1;
       }
     }
   }
-  public function calcprice($stickerPrice, $rollOver) {
-    if ($rollOver == FALSE) {
+  public function calcprice($stickerPrice) {
+    if ($this->rollOver == 0) {
       $factor = $this->fraction;
     }
-    if ($rollOver == TRUE) {
+    if ($this->rollOver == 1) {
       $factor = $this->fraction + 1;
     }
     $proratedPrice = $stickerPrice * $factor;
