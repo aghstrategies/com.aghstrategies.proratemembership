@@ -48,15 +48,20 @@ class CRM_Proratemembership_Prorate {
       $this->rollOver = $rolloverDate;
       $fixedStartDate = $startYear . '-' . $fixedStartMonthDay[0] . '-' . $fixedStartMonthDay[1];
       $fixedStartDate = date_timestamp_get(date_create_from_format('Y-m-d', "$fixedStartDate"));
-      $this->fraction = ($rolloverDate - $today) / ($rolloverDate - $fixedStartDate);
+      $fixedEndDate = $endYear . '-' . $fixedStartMonthDay[0] . '-' . $fixedStartMonthDay[1];
+      $fixedEndDate = date_timestamp_get(date_create_from_format('Y-m-d', "$fixedEndDate"));
+      $this->fraction = ($fixedEndDate - $today) / ($fixedEndDate - $fixedStartDate);
+      if ($today > $rolloverDate) {
+        $this->rollOver = TRUE;
+      }
     }
   }
-  public function calcprice($stickerPrice, $terms = 1) {
-    if ($terms == 1) {
+  public function calcprice($stickerPrice, $rollOver) {
+    if ($rollOver == FALSE) {
       $factor = $this->fraction;
     }
-    if ($terms > 1) {
-      $factor = $this->fraction + ($terms - 1);
+    if ($rollOver == TRUE) {
+      $factor = $this->fraction + 1;
     }
     $proratedPrice = $stickerPrice * $factor;
     return number_format((float) $proratedPrice, 2, '.', '');
