@@ -40,7 +40,7 @@ class CRM_Proratemembership_Prorate {
       }
       $startYear = date('Y', $today);
       $endYear = $startYear + $membershipType['duration_interval'];
-      $rolloverDateFormatted = $endYear . "-" . $rolloverDate[0] . "-" . $rolloverDate[1];
+      $rolloverDateFormatted = $startYear . "-" . $rolloverDate[0] . "-" . $rolloverDate[1];
       $rolloverDate = date_create_from_format('Y-m-d', "$rolloverDateFormatted");
       $rolloverDate = date_timestamp_get($rolloverDate);
       $fixedStartDate = $startYear . '-' . $fixedStartMonthDay[0] . '-' . $fixedStartMonthDay[1];
