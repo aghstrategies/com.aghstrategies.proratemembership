@@ -22,13 +22,15 @@ function proratemembership_civicrm_buildAmount($pageType, &$form, &$amount) {
       )));
     }
     $priceFields = $prorateFields['values'][1]['proratemembership_pricefields'];
-    foreach ($priceFields as $priceField) {
-      $prorates = array();
-      foreach ($amount[$priceField]['options'] as $option => $optionValues) {
-        if (empty($prorates[$optionValues['membership_type_id']])) {
-          $prorates[$optionValues['membership_type_id']] = new CRM_Proratemembership_Prorate($optionValues['membership_type_id']);
+    if (!empty($priceFields)) {
+      foreach ($priceFields as $priceField) {
+        $prorates = array();
+        foreach ($amount[$priceField]['options'] as $option => $optionValues) {
+          if (empty($prorates[$optionValues['membership_type_id']])) {
+            $prorates[$optionValues['membership_type_id']] = new CRM_Proratemembership_Prorate($optionValues['membership_type_id']);
+          }
+          $amount[$priceField]['options'][$option]['amount'] = $prorates[$optionValues['membership_type_id']]->calcprice($optionValues['amount']);
         }
-        $amount[$priceField]['options'][$option]['amount'] = $prorates[$optionValues['membership_type_id']]->calcprice($optionValues['amount']);
       }
     }
   }
